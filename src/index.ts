@@ -19,10 +19,9 @@ export type GRPCClientCallFunction<RequestType, ResponseType> = (
 ) => Promise<ResponseType>;
 
 // tslint:disable-next-line: no-empty-interface
-export interface IGRPCClientMapOfMethod<
-    RequestType = any,
-    ResponseType = any
-> {}
+export interface IGRPCClientMapOfMethod {
+    [index: string]: GRPCClientCallFunction<any, any>;
+}
 
 // prettier-ignore
 export class GRPCClient<T extends IGRPCClientMapOfMethod = IGRPCClientMapOfMethod> {
@@ -52,9 +51,10 @@ export class GRPCClient<T extends IGRPCClientMapOfMethod = IGRPCClientMapOfMetho
 
     // prettier-ignore
     public call
-        <RequestType = T extends IGRPCClientMapOfMethod<infer U, any> ? U : any,
-        ResponseType = T extends IGRPCClientMapOfMethod<any, infer U> ? U : any>
-        (methodName: keyof T, argument: RequestType, options?: IGRPCClientCallOptions): Promise<ResponseType> {
+        <K extends keyof T,
+        RequestType = T[K] extends GRPCClientCallFunction<infer U, any> ? U : any,
+        ResponseType = T[K] extends GRPCClientCallFunction<any, infer U> ? U : any>
+        (methodName: K, argument: RequestType, options?: IGRPCClientCallOptions): Promise<ResponseType> {
         // tslint:disable-next-line: no-parameter-reassignment
         options = Object.assign({
             metadata: undefined,
