@@ -18,15 +18,12 @@ export type GRPCClientCallFunction<RequestType, ResponseType> = (
     options?: IGRPCClientCallOptions,
 ) => Promise<ResponseType>;
 
-export interface IGRPCClientMappingOfMethod<
-    RequestType = any,
-    ResponseType = any
-> {
+export interface IGRPCClientMapOfMethod<RequestType = any, ResponseType = any> {
     [index: string]: GRPCClientCallFunction<RequestType, ResponseType>;
 }
 
 // prettier-ignore
-export class GRPCClient<T extends IGRPCClientMappingOfMethod<any, any> = IGRPCClientMappingOfMethod<any, any>> {
+export class GRPCClient<T extends IGRPCClientMapOfMethod<any, any> = IGRPCClientMapOfMethod<any, any>> {
     constructor(options: IGRPCClientOptions) {
         this.packageDefinition = protoLoader.loadSync(
             options.filepath,
@@ -53,8 +50,8 @@ export class GRPCClient<T extends IGRPCClientMappingOfMethod<any, any> = IGRPCCl
 
     // prettier-ignore
     public call
-        <RequestType = T extends IGRPCClientMappingOfMethod<infer U, any> ? Promise<U> : Promise<any>,
-        ResponseType = T extends IGRPCClientMappingOfMethod<any, infer U> ? Promise<U> : Promise<any>>
+        <RequestType = T extends IGRPCClientMapOfMethod<infer U, any> ? Promise<U> : Promise<any>,
+        ResponseType = T extends IGRPCClientMapOfMethod<any, infer U> ? Promise<U> : Promise<any>>
         (methodName: keyof T, argument: RequestType, options?: IGRPCClientCallOptions): Promise<ResponseType> {
         // tslint:disable-next-line: no-parameter-reassignment
         options = Object.assign({
