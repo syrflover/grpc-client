@@ -18,7 +18,10 @@ export type GRPCClientCallFunction<RequestType, ResponseType> = (
     options?: IGRPCClientCallOptions,
 ) => Promise<ResponseType>;
 
-export interface IGRPCClientMappingOfMethod<RequestType, ResponseType> {
+export interface IGRPCClientMappingOfMethod<
+    RequestType = any,
+    ResponseType = any
+> {
     [index: string]: GRPCClientCallFunction<RequestType, ResponseType>;
 }
 
