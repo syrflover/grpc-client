@@ -55,7 +55,7 @@ export class GRPCClient<T extends IGRPCClientMappingOfMethod<any, any> = IGRPCCl
     public call
         <RequestType = T extends IGRPCClientMappingOfMethod<infer U, any> ? Promise<U> : Promise<any>,
         ResponseType = T extends IGRPCClientMappingOfMethod<any, infer U> ? Promise<U> : Promise<any>>
-        (methodName: string, argument: RequestType, options?: IGRPCClientCallOptions): Promise<ResponseType> {
+        (methodName: keyof T, argument: RequestType, options?: IGRPCClientCallOptions): Promise<ResponseType> {
         // tslint:disable-next-line: no-parameter-reassignment
         options = Object.assign({
             metadata: undefined,
