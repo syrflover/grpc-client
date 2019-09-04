@@ -16,6 +16,8 @@ export interface IGRPCClientMapOfMethod {
 export declare class GRPCClient<T extends IGRPCClientMapOfMethod = IGRPCClientMapOfMethod> {
     constructor(options: IGRPCClientOptions);
     call<K extends keyof T, RequestType = T[K] extends GRPCClientCallFunction<infer U, any> ? U : any, ResponseType = T[K] extends GRPCClientCallFunction<any, infer U> ? U : any>(methodName: K, argument: RequestType, options?: IGRPCClientCallOptions): Promise<ResponseType>;
+    call<RequestType, ResponseType>(methodName: string, argument: RequestType, options?: IGRPCClientCallOptions): Promise<ResponseType>;
+    call(methodName: string, argument: any, options?: IGRPCClientCallOptions): Promise<any>;
     client: grpc.Client;
     packageDefinition: protoLoader.PackageDefinition;
 }

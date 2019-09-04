@@ -49,6 +49,14 @@ export class GRPCClient<T extends IGRPCClientMapOfMethod = IGRPCClientMapOfMetho
         } */
     }
 
+    public call<K extends keyof T,
+        RequestType = T[K] extends GRPCClientCallFunction<infer U, any> ? U : any,
+        ResponseType = T[K] extends GRPCClientCallFunction<any, infer U> ? U : any>
+    (methodName: K, argument: RequestType, options?: IGRPCClientCallOptions): Promise<ResponseType>;
+
+    public call<RequestType, ResponseType>(methodName: string, argument: RequestType, options?: IGRPCClientCallOptions): Promise<ResponseType>;
+
+    public call(methodName: string, argument: any, options?: IGRPCClientCallOptions): Promise<any>;
     // prettier-ignore
     public call
         <K extends keyof T,
