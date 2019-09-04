@@ -18,12 +18,14 @@ export type GRPCClientCallFunction<RequestType, ResponseType> = (
     options?: IGRPCClientCallOptions,
 ) => Promise<ResponseType>;
 
-export interface IGRPCClientMapOfMethod<RequestType = any, ResponseType = any> {
-    [index: string]: GRPCClientCallFunction<RequestType, ResponseType>;
-}
+// tslint:disable-next-line: no-empty-interface
+export interface IGRPCClientMapOfMethod<
+    RequestType = any,
+    ResponseType = any
+> {}
 
 // prettier-ignore
-export class GRPCClient<T extends IGRPCClientMapOfMethod = IGRPCClientMapOfMethod> {
+export class GRPCClient<T = IGRPCClientMapOfMethod> {
     constructor(options: IGRPCClientOptions) {
         this.packageDefinition = protoLoader.loadSync(
             options.filepath,
