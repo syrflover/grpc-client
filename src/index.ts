@@ -31,22 +31,12 @@ export class GRPCClient<T extends IGRPCClientMapOfMethods = IGRPCClientMapOfMeth
             { keepCase: true, ...options },
         );
 
-        // prettier-ignore
         const Client = grpc.loadPackageDefinition(this.packageDefinition)[options.package] as any;
 
         this.client = new Client[options.service](
             options.address,
             grpc.credentials.createInsecure(),
         );
-
-        /* // prettier-ignore
-        const methods = this.packageDefinition[`${options.package}.${options.service}`];
-
-        for (const key in methods) {
-            // prettier-ignore
-            const method = methods[key as keyof typeof methods] as protoLoader.MethodDefinition<any, any>;
-            const methodName = method.originalName!;
-        } */
     }
 
     public call
@@ -55,7 +45,6 @@ export class GRPCClient<T extends IGRPCClientMapOfMethods = IGRPCClientMapOfMeth
             ResponseType = T[keyof T] extends GRPCClientCallMethod<any, infer U> ? U : any>
         (methodName: K, argument: T[K] extends GRPCClientCallMethod<infer U, any> ? U : any, options?: IGRPCClientCallOptions): Promise<ResponseType>;
 
-    // prettier-ignore
     public call<RequestType, ResponseType>(methodName: string, argument: RequestType, options?: IGRPCClientCallOptions): Promise<ResponseType> {
         // tslint:disable-next-line: no-parameter-reassignment
         options = { metadata: undefined, ...options! };
@@ -73,7 +62,7 @@ export class GRPCClient<T extends IGRPCClientMapOfMethods = IGRPCClientMapOfMeth
 
             client[methodName](argument, options!.metadata, options, cb);
 
-            // grpc.Client.prototype.makeUnaryRequest();
+            // as grpc.Client.prototype.makeUnaryRequest();
         });
     }
 
@@ -81,7 +70,7 @@ export class GRPCClient<T extends IGRPCClientMapOfMethods = IGRPCClientMapOfMeth
     public packageDefinition: protoLoader.PackageDefinition;
 
     public close() {
-        this.client.close();
+        return this.client.close();
     }
 
     public getChannel() {
@@ -89,7 +78,7 @@ export class GRPCClient<T extends IGRPCClientMapOfMethods = IGRPCClientMapOfMeth
     }
 
     public waitForReady(deadline: grpc.Deadline, callback: (error: Error | null) => void) {
-        this.client.waitForReady(deadline, callback);
+        return this.client.waitForReady(deadline, callback);
     }
 
     public makeUnaryRequest
@@ -110,8 +99,7 @@ export class GRPCClient<T extends IGRPCClientMapOfMethods = IGRPCClientMapOfMeth
         serialize: grpc.serialize<RequestType>,
         deserialize: grpc.deserialize<ResponseType>,
         metadata?: grpc.Metadata | null,
-        options?: grpc.CallOptions | null,
-        ) {
+        options?: grpc.CallOptions | null) {
         return this.client.makeBidiStreamRequest<RequestType, ResponseType>(method, serialize, deserialize, metadata, options);
     }
 
