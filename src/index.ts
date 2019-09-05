@@ -1,6 +1,20 @@
 import * as grpc from 'grpc';
 import * as protoLoader from '@grpc/proto-loader';
 
+// prettier-ignore
+export type ParseRequestType<
+    T extends GRPCClientCallMethod<any, any>
+> = T extends GRPCClientCallMethod<infer RequestType, any>
+    ? RequestType
+    : any;
+
+// prettier-ignore
+export type ParseResponseType<
+    T extends GRPCClientCallMethod<any, any>
+> = T extends GRPCClientCallMethod<any, infer ResponseType>
+    ? ResponseType
+    : any;
+
 export interface IGRPCClientOptions extends protoLoader.Options {
     address: string;
     package: string;

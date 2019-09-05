@@ -2,6 +2,8 @@ import {
     IGRPCClientMapOfMethods,
     GRPCClientCallMethod,
     GRPCClient,
+    ParseRequestType,
+    ParseResponseType,
 } from './src';
 
 interface IUserMethods extends IGRPCClientMapOfMethods {
@@ -41,4 +43,7 @@ interface IUserMethods extends IGRPCClientMapOfMethods {
     user.username;
     user.email;
     user.created_at;
+
+    type RequestType = ParseRequestType<IUserMethods['getUser']>;
+    type ResponseType = ParseResponseType<IUserMethods['getUser']>;
 })();
