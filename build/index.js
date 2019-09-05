@@ -5,7 +5,7 @@ const protoLoader = require("@grpc/proto-loader");
 // prettier-ignore
 class GRPCClient {
     constructor(options) {
-        this.packageDefinition = protoLoader.loadSync(options.filepath, options);
+        this.packageDefinition = protoLoader.loadSync(options.filepath, Object.assign({ keepCase: true }, options));
         // prettier-ignore
         const Client = grpc.loadPackageDefinition(this.packageDefinition)[options.package];
         this.client = new Client[options.service](options.address, grpc.credentials.createInsecure());

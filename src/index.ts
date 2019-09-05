@@ -28,7 +28,7 @@ export class GRPCClient<T extends IGRPCClientMapOfMethod = IGRPCClientMapOfMetho
     constructor(options: IGRPCClientOptions) {
         this.packageDefinition = protoLoader.loadSync(
             options.filepath,
-            options,
+            { keepCase: true, ...options },
         );
 
         // prettier-ignore
