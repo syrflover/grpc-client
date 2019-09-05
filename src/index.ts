@@ -80,11 +80,60 @@ export class GRPCClient<T extends IGRPCClientMapOfMethods = IGRPCClientMapOfMeth
     public client: grpc.Client;
     public packageDefinition: protoLoader.PackageDefinition;
 
-    public close: typeof grpc.Client.prototype.close = this.client.close.bind(this.client);
-    public getChannel: typeof grpc.Client.prototype.getChannel = this.client.getChannel.bind(this.client);
-    public waitForReady: typeof grpc.Client.prototype.waitForReady = this.client.waitForReady.bind(this.client);
-    public makeUnaryRequest: typeof grpc.Client.prototype.makeUnaryRequest = this.client.makeUnaryRequest.bind(this.client);
-    public makeBidiStreamRequest: typeof grpc.Client.prototype.makeBidiStreamRequest = this.client.makeBidiStreamRequest.bind(this.client);
-    public makeClientStreamRequest: typeof grpc.Client.prototype.makeClientStreamRequest = this.client.makeClientStreamRequest.bind(this.client);
-    public makeServerStreamRequest: typeof grpc.Client.prototype.makeServerStreamRequest = this.client.makeServerStreamRequest.bind(this.client);
+    public close() {
+        this.client.close();
+    }
+
+    public getChannel() {
+        return this.client.getChannel();
+    }
+
+    public waitForReady(deadline: grpc.Deadline, callback: (error: Error | null) => void) {
+        this.client.waitForReady(deadline, callback);
+    }
+
+    public makeUnaryRequest
+        <RequestType, ResponseType>
+        (method: string,
+        serialize: grpc.serialize<RequestType>,
+        deserialize: grpc.deserialize<ResponseType>,
+        argument: RequestType | null,
+        metadata: grpc.Metadata | null,
+        options: grpc.CallOptions | null,
+        callback: grpc.requestCallback<ResponseType>) {
+        return this.client.makeUnaryRequest<RequestType, ResponseType>(method, serialize, deserialize, argument, metadata, options, callback);
+    }
+
+    public makeBidiStreamRequest
+        <RequestType, ResponseType>
+        (method: string,
+        serialize: grpc.serialize<RequestType>,
+        deserialize: grpc.deserialize<ResponseType>,
+        metadata?: grpc.Metadata | null,
+        options?: grpc.CallOptions | null,
+        ) {
+        return this.client.makeBidiStreamRequest<RequestType, ResponseType>(method, serialize, deserialize, metadata, options);
+    }
+
+    public makeClientStreamRequest
+        <RequestType, ResponseType>
+        (method: string,
+        serialize: grpc.serialize<RequestType>,
+        deserialize: grpc.deserialize<ResponseType>,
+        metadata: grpc.Metadata | null,
+        options: grpc.CallOptions | null,
+        callback: grpc.requestCallback<ResponseType>) {
+        return this.client.makeClientStreamRequest<RequestType, ResponseType>(method, serialize, deserialize, metadata, options, callback);
+    }
+
+    public makeServerStreamRequest
+        <RequestType, ResponseType>
+        (method: string,
+        serialize: grpc.serialize<RequestType>,
+        deserialize: grpc.deserialize<ResponseType>,
+        argument: RequestType,
+        metadata?: grpc.Metadata | null,
+        options?: grpc.CallOptions | null) {
+        return this.client.makeServerStreamRequest(method, serialize, deserialize, argument, metadata, options);
+    }
 }
