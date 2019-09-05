@@ -14,7 +14,6 @@ export interface IGRPCClientCallOptions extends grpc.CallOptions {
 
 export type GRPCClientCallMethod<RequestType, ResponseType> = (
     argument: RequestType,
-    metadata?: grpc.Metadata,
     options?: IGRPCClientCallOptions,
 ) => Promise<ResponseType>;
 
