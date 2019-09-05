@@ -58,9 +58,7 @@ export class GRPCClient<T extends IGRPCClientMapOfMethod = IGRPCClientMapOfMetho
     // prettier-ignore
     public call<RequestType, ResponseType>(methodName: string, argument: RequestType, options?: IGRPCClientCallOptions): Promise<ResponseType> {
         // tslint:disable-next-line: no-parameter-reassignment
-        options = Object.assign({
-            metadata: undefined,
-        }, options);
+        options = { metadata: undefined, ...options! };
 
         return new Promise((resolve, reject) => {
             const client = this.client as any;

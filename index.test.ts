@@ -16,12 +16,21 @@ interface IReaderMethods extends IGRPCClientMapOfMethod {
     >;
 }
 
-const client = new GRPCClient<IReaderMethods>({
-    filepath: './proto/reader.proto',
-    address: '0.0.0.0:11111',
-    package: 'Reader',
-    service: 'ReaderService',
-});
+(async () => {
+    const client = new GRPCClient<IReaderMethods>({
+        filepath: './proto/reader.proto',
+        address: '0.0.0.0:11111',
+        package: 'Reader',
+        service: 'ReaderService',
+    });
 
-client.call('getReader', { type: 'email', value: 'syr@meu.works' });
-client.call('addReader', { username: 'syr', email: 'syr@meu.works' });
+    const reader = await client.call('getReader', {
+        type: 'email',
+        value: 'syr@meu.works',
+    });
+    reader.id;
+    reader.username;
+    reader.email;
+    reader.created_at;
+    client.call('addReader', { username: 'syr', email: 'syr@meu.works' });
+})();
