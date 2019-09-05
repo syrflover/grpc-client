@@ -79,4 +79,12 @@ export class GRPCClient<T extends IGRPCClientMapOfMethods = IGRPCClientMapOfMeth
 
     public client: grpc.Client;
     public packageDefinition: protoLoader.PackageDefinition;
+
+    public close: typeof grpc.Client.prototype.close = this.client.close.bind(this.client);
+    public getChannel: typeof grpc.Client.prototype.getChannel = this.client.getChannel.bind(this.client);
+    public waitForReady: typeof grpc.Client.prototype.waitForReady = this.client.waitForReady.bind(this.client);
+    public makeUnaryRequest: typeof grpc.Client.prototype.makeUnaryRequest = this.client.makeUnaryRequest.bind(this.client);
+    public makeBidiStreamRequest: typeof grpc.Client.prototype.makeBidiStreamRequest = this.client.makeBidiStreamRequest.bind(this.client);
+    public makeClientStreamRequest: typeof grpc.Client.prototype.makeClientStreamRequest = this.client.makeClientStreamRequest.bind(this.client);
+    public makeServerStreamRequest: typeof grpc.Client.prototype.makeServerStreamRequest = this.client.makeServerStreamRequest.bind(this.client);
 }

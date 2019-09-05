@@ -24,13 +24,15 @@ interface IReaderMethods extends IGRPCClientMapOfMethods {
         service: 'ReaderService',
     });
 
+    await client.call('addReader', { username: 'syr', email: 'syr@meu.works' });
+
     const reader = await client.call('getReader', {
         type: 'email',
         value: 'syr@meu.works',
     });
+
     reader.id;
     reader.username;
     reader.email;
     reader.created_at;
-    client.call('addReader', { username: 'syr', email: 'syr@meu.works' });
 })();
