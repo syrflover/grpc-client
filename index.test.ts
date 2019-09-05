@@ -1,16 +1,16 @@
 import {
-    IGRPCClientMapOfMethod,
-    GRPCClientCallFunction,
+    IGRPCClientMapOfMethods,
+    GRPCClientCallMethod,
     GRPCClient,
 } from './src';
 
-interface IReaderMethods extends IGRPCClientMapOfMethod {
+interface IReaderMethods extends IGRPCClientMapOfMethods {
     // getReader: (argument: { type: 'id' | 'username' | 'email' }) => Promise<Reader>;
-    getReader: GRPCClientCallFunction<
+    getReader: GRPCClientCallMethod<
         { type: 'id' | 'username' | 'email'; value: string },
         { id: string; username: string; email: string; created_at: string }
     >;
-    addReader: GRPCClientCallFunction<
+    addReader: GRPCClientCallMethod<
         { username: string; email: string },
         { id: string; username: string; email: string; created_at: string }
     >;

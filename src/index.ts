@@ -12,19 +12,19 @@ export interface IGRPCClientCallOptions extends grpc.CallOptions {
     metadata?: grpc.Metadata;
 }
 
-export type GRPCClientCallFunction<RequestType, ResponseType> = (
+export type GRPCClientCallMethod<RequestType, ResponseType> = (
     argument: RequestType,
     metadata?: grpc.Metadata,
     options?: IGRPCClientCallOptions,
 ) => Promise<ResponseType>;
 
 // tslint:disable-next-line: no-empty-interface
-export interface IGRPCClientMapOfMethod {
-    // [index: string]: GRPCClientCallFunction<any, any>;
+export interface IGRPCClientMapOfMethods {
+    // [index: string]: GRPCClientCallMethod<any, any>;
 }
 
 // prettier-ignore
-export class GRPCClient<T extends IGRPCClientMapOfMethod = IGRPCClientMapOfMethod> {
+export class GRPCClient<T extends IGRPCClientMapOfMethods = IGRPCClientMapOfMethods> {
     constructor(options: IGRPCClientOptions) {
         this.packageDefinition = protoLoader.loadSync(
             options.filepath,
@@ -51,9 +51,9 @@ export class GRPCClient<T extends IGRPCClientMapOfMethod = IGRPCClientMapOfMetho
 
     public call
             <K extends keyof T,
-            RequestType = T[keyof T] extends GRPCClientCallFunction<infer U, any> ? U : any,
-            ResponseType = T[keyof T] extends GRPCClientCallFunction<any, infer U> ? U : any>
-        (methodName: K, argument: T[K] extends GRPCClientCallFunction<infer U, any> ? U : any, options?: IGRPCClientCallOptions): Promise<ResponseType>;
+            RequestType = T[keyof T] extends GRPCClientCallMethod<infer U, any> ? U : any,
+            ResponseType = T[keyof T] extends GRPCClientCallMethod<any, infer U> ? U : any>
+        (methodName: K, argument: T[K] extends GRPCClientCallMethod<infer U, any> ? U : any, options?: IGRPCClientCallOptions): Promise<ResponseType>;
 
     // prettier-ignore
     public call<RequestType, ResponseType>(methodName: string, argument: RequestType, options?: IGRPCClientCallOptions): Promise<ResponseType> {
