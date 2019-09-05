@@ -3,11 +3,23 @@
     "version": "0.0.1",
     "main": "build/index.js",
     "types": "build/index.d.ts",
-    "license": "MIT",
     "scripts": {
         "build": "tsc -p tsconfig.json",
         "prepublishOnly": "npm run build"
     },
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/syrflover/grpc-client.git"
+    },
+    "author": {
+        "name": "Lee Tae Woo",
+        "email": "syr@meu.works"
+    },
+    "license": "MIT",
+    "engines": {
+        "node": ">=8"
+    },
+    "bugs": "https://github.com/syrflover/grpc-client/issues",
     "dependencies": {
         "@grpc/proto-loader": "^0.5.2",
         "grpc": "^1.23.3"
