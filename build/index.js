@@ -8,7 +8,7 @@ class GRPCClient {
         this.packageDefinition = protoLoader.loadSync(options.filepath, options);
         // prettier-ignore
         const Client = grpc.loadPackageDefinition(this.packageDefinition)[options.package];
-        this.client = new Client(options.address, grpc.credentials.createInsecure());
+        this.client = new Client[options.service](options.address, grpc.credentials.createInsecure());
         /* // prettier-ignore
         const methods = this.packageDefinition[`${options.package}.${options.service}`];
 

@@ -20,7 +20,7 @@ export type GRPCClientCallFunction<RequestType, ResponseType> = (
 
 // tslint:disable-next-line: no-empty-interface
 export interface IGRPCClientMapOfMethod {
-    [index: string]: GRPCClientCallFunction<any, any>;
+    // [index: string]: GRPCClientCallFunction<any, any>;
 }
 
 // prettier-ignore
@@ -32,9 +32,9 @@ export class GRPCClient<T extends IGRPCClientMapOfMethod = IGRPCClientMapOfMetho
         );
 
         // prettier-ignore
-        const Client = grpc.loadPackageDefinition(this.packageDefinition)[options.package] as typeof grpc.Client;
+        const Client = grpc.loadPackageDefinition(this.packageDefinition)[options.package] as any;
 
-        this.client = new Client(
+        this.client = new Client[options.service](
             options.address,
             grpc.credentials.createInsecure(),
         );
@@ -49,20 +49,14 @@ export class GRPCClient<T extends IGRPCClientMapOfMethod = IGRPCClientMapOfMetho
         } */
     }
 
-    public call<K extends keyof T,
-        RequestType = T[K] extends GRPCClientCallFunction<infer U, any> ? U : any,
-        ResponseType = T[K] extends GRPCClientCallFunction<any, infer U> ? U : any>
-    (methodName: K, argument: RequestType, options?: IGRPCClientCallOptions): Promise<ResponseType>;
-
-    public call<RequestType, ResponseType>(methodName: string, argument: RequestType, options?: IGRPCClientCallOptions): Promise<ResponseType>;
-
-    public call(methodName: string, argument: any, options?: IGRPCClientCallOptions): Promise<any>;
-    // prettier-ignore
     public call
-        <K extends keyof T,
-        RequestType = T[K] extends GRPCClientCallFunction<infer U, any> ? U : any,
-        ResponseType = T[K] extends GRPCClientCallFunction<any, infer U> ? U : any>
-        (methodName: K, argument: RequestType, options?: IGRPCClientCallOptions): Promise<ResponseType> {
+            <K extends keyof T,
+            RequestType = T[keyof T] extends GRPCClientCallFunction<infer U, any> ? U : any,
+            ResponseType = T[keyof T] extends GRPCClientCallFunction<any, infer U> ? U : any>
+        (methodName: K, argument: T[K] extends GRPCClientCallFunction<infer U, any> ? U : any, options?: IGRPCClientCallOptions): Promise<ResponseType>;
+
+    // prettier-ignore
+    public call<RequestType, ResponseType>(methodName: string, argument: RequestType, options?: IGRPCClientCallOptions): Promise<ResponseType> {
         // tslint:disable-next-line: no-parameter-reassignment
         options = Object.assign({
             metadata: undefined,
