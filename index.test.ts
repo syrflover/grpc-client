@@ -47,3 +47,23 @@ interface IUserMethods extends IGRPCClientMapOfMethods {
     type RequestType = ParseRequestType<IUserMethods['getUser']>;
     type ResponseType = ParseResponseType<IUserMethods['getUser']>;
 })();
+
+interface ITestMethods extends IGRPCClientMapOfMethods {
+    a: GRPCClientCallMethod<{ a: number }, { b: string }>;
+    b: GRPCClientCallMethod<{ b: string }, { a: number }>;
+}
+
+(async () => {
+    const client = new GRPCClient<ITestMethods>({
+        filepath: './test.proto',
+        address: '0.0.0.0:12345',
+        package: 'Test',
+        service: 'TestService',
+    });
+
+    const a = await client.call('a', { a: 1 });
+    a.b;
+
+    const b = await client.call('b', { b: 'str' });
+    b.a;
+})();
