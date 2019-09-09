@@ -135,6 +135,6 @@ export class GRPCClient<T extends IGRPCClientMapOfMethods = IGRPCClientMapOfMeth
         argument: RequestType,
         metadata?: grpc.Metadata | null,
         options?: grpc.CallOptions | null) {
-        return this.client.makeServerStreamRequest(method, serialize, deserialize, argument, metadata, options);
+        return this.client.makeServerStreamRequest<RequestType, ResponseType>(method, serialize, deserialize, argument, metadata, options);
     }
 }
