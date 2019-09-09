@@ -53,10 +53,9 @@ export class GRPCClient<T extends IGRPCClientMapOfMethods = IGRPCClientMapOfMeth
     }
 
     public call
-            <K extends keyof T,
-            RequestType = T[K] extends GRPCClientCallMethod<infer U, any> ? U : any,
-            ResponseType = T[K] extends GRPCClientCallMethod<any, infer U> ? U : any>
-        (methodName: K, argument: RequestType, options?: IGRPCClientCallOptions): Promise<ResponseType>;
+            <K extends keyof T>
+        (methodName: K, argument: T[K] extends GRPCClientCallMethod<infer U, any> ? U : any, options?: IGRPCClientCallOptions): Promise<T[K] extends GRPCClientCallMethod<any, infer U> ? U : any>;
+    public call<RequestType, ResponseType>(methodName: string, argument: RequestType, options?: IGRPCClientCallOptions): Promise<ResponseType>;
 
     public call<RequestType, ResponseType>(methodName: string, argument: RequestType, options?: IGRPCClientCallOptions): Promise<ResponseType> {
         // tslint:disable-next-line: no-parameter-reassignment
