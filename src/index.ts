@@ -44,6 +44,9 @@ export class GRPCClient<T extends IGRPCClientMapOfMethods = IGRPCClientMapOfMeth
             { keepCase: true, ...options },
         );
 
+        this.service = options.service;
+        this.package = options.package;
+
         const Client = grpc.loadPackageDefinition(this.packageDefinition)[options.package] as any;
 
         this.client = new Client[options.service](
@@ -51,6 +54,8 @@ export class GRPCClient<T extends IGRPCClientMapOfMethods = IGRPCClientMapOfMeth
             grpc.credentials.createInsecure(),
         );
     }
+    private service: string;
+    private package: string;
 
     public call
             <K extends keyof T>
@@ -71,6 +76,12 @@ export class GRPCClient<T extends IGRPCClientMapOfMethods = IGRPCClientMapOfMeth
                 }
                 resolve(data);
             };
+
+            if (!(methodName in client)) {
+                const notFoundError = new Error(`Not Found ${methodName} in ${this.service}`);
+                reject(notFoundError);
+                return;
+            }
 
             client[methodName](argument, options!.metadata, options, cb);
 
