@@ -1,6 +1,6 @@
 {
     "name": "@syrflover/grpc-client",
-    "version": "0.0.14",
+    "version": "0.0.22",
     "main": "build/index.js",
     "types": "build/index.d.ts",
     "scripts": {

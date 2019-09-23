@@ -41,7 +41,7 @@ export class GRPCClient<T extends IGRPCClientMapOfMethods = IGRPCClientMapOfMeth
     constructor(options: IGRPCClientOptions) {
         this.packageDefinition = protoLoader.loadSync(
             options.filepath,
-            { keepCase: true, ...options },
+            { keepCase: true, arrays: true, ...options },
         );
 
         this.service = options.service;
