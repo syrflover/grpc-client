@@ -59,10 +59,10 @@ export class GRPCClient<T extends IGRPCClientMapOfMethods = IGRPCClientMapOfMeth
 
     public call
             <K extends keyof T>
-        (methodName: K, argument: T[K] extends GRPCClientCallMethod<infer U, any> ? U : any, options?: IGRPCClientCallOptions): Promise<T[K] extends GRPCClientCallMethod<any, infer U> ? U : any>;
+        (methodName: K, argument: T[K] extends GRPCClientCallMethod<infer U, any> ? U : any, options?: Partial<IGRPCClientCallOptions>): Promise<T[K] extends GRPCClientCallMethod<any, infer U> ? U : any>;
     // public call<RequestType, ResponseType>(methodName: string, argument: RequestType, options?: IGRPCClientCallOptions): Promise<ResponseType>;
 
-    public call<RequestType, ResponseType>(methodName: string, argument: RequestType, options?: IGRPCClientCallOptions): Promise<ResponseType> {
+    public call<RequestType, ResponseType>(methodName: string, argument: RequestType, options: Partial<IGRPCClientCallOptions> = {}): Promise<ResponseType> {
         // tslint:disable-next-line: no-parameter-reassignment
         options = { metadata: undefined, ...options! };
 
@@ -83,7 +83,7 @@ export class GRPCClient<T extends IGRPCClientMapOfMethods = IGRPCClientMapOfMeth
                 return;
             }
 
-            client[methodName](argument, options!.metadata, options, cb);
+           client[methodName](argument, options!.metadata, options, cb);
 
             // as grpc.Client.prototype.makeUnaryRequest();
         });
