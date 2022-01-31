@@ -114,8 +114,8 @@ export class GRPCClient<T extends IGRPCClientMapOfMethods = IGRPCClientMapOfMeth
         options: grpc.CallOptions | null,
         callback: grpc.requestCallback<ResponseType>) {
         
-        const metadata_ = metadata ?? new grpc.Metadata();
-        const options_ = options?? {};
+        const metadata_ = metadata ? metadata : new grpc.Metadata();
+        const options_ = options ? options :{};
 
         return this.client.makeUnaryRequest<RequestType, ResponseType>(method, serialize, deserialize, argument, metadata_, options_, callback);
     }
@@ -128,8 +128,8 @@ export class GRPCClient<T extends IGRPCClientMapOfMethods = IGRPCClientMapOfMeth
         metadata?: grpc.Metadata | null,
         options?: grpc.CallOptions | null) {
             
-        const metadata_ = metadata ?? new grpc.Metadata();
-        const options_ = options?? {};
+        const metadata_ = metadata ? metadata : new grpc.Metadata();
+        const options_ = options ? options : {};
 
         return this.client.makeBidiStreamRequest<RequestType, ResponseType>(method, serialize, deserialize, metadata_, options_);
     }
@@ -143,8 +143,8 @@ export class GRPCClient<T extends IGRPCClientMapOfMethods = IGRPCClientMapOfMeth
         options: grpc.CallOptions | null,
         callback: grpc.requestCallback<ResponseType>) {
             
-        const metadata_ = metadata ?? new grpc.Metadata();
-        const options_ = options?? {};
+        const metadata_ = metadata ? metadata : new grpc.Metadata();
+        const options_ = options ? options : {};
 
         return this.client.makeClientStreamRequest<RequestType, ResponseType>(method, serialize, deserialize, metadata_, options_, callback);
     }
@@ -158,8 +158,8 @@ export class GRPCClient<T extends IGRPCClientMapOfMethods = IGRPCClientMapOfMeth
         metadata?: grpc.Metadata | null,
         options?: grpc.CallOptions | null) {
             
-        const metadata_ = metadata ?? new grpc.Metadata();
-        const options_ = options?? {};
+        const metadata_ = metadata ? metadata : new grpc.Metadata();
+        const options_ = options ? options : {};
 
         return this.client.makeServerStreamRequest<RequestType, ResponseType>(method, serialize, deserialize, argument, metadata_, options_);
     }
