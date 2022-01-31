@@ -1,6 +1,6 @@
 {
     "name": "@syrflover/grpc-client",
-    "version": "0.0.23",
+    "version": "0.0.30",
     "main": "build/index.js",
     "types": "build/index.d.ts",
     "scripts": {
@@ -17,7 +17,7 @@
     },
     "license": "MIT",
     "engines": {
-        "node": ">=8"
+        "node": ">=10"
     },
     "bugs": "https://github.com/syrflover/grpc-client/issues",
     "keywords": [
@@ -25,7 +25,7 @@
     ],
     "dependencies": {
         "@grpc/proto-loader": "^0.5.2",
-        "grpc": "^1.23.3"
+        "@grpc/grpc-js": "^1.5.3"
     },
     "devDependencies": {
         "ts-node": "^8.3.0",

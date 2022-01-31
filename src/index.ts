@@ -1,4 +1,4 @@
-import * as grpc from 'grpc';
+import * as grpc from '@grpc/grpc-js';
 import * as protoLoader from '@grpc/proto-loader';
 
 // prettier-ignore
@@ -100,7 +100,7 @@ export class GRPCClient<T extends IGRPCClientMapOfMethods = IGRPCClientMapOfMeth
         return this.client.getChannel();
     }
 
-    public waitForReady(deadline: grpc.Deadline, callback: (error: Error | null) => void) {
+    public waitForReady(deadline: grpc.Deadline, callback: (error: Error | undefined) => void) {
         return this.client.waitForReady(deadline, callback);
     }
 
@@ -109,11 +109,15 @@ export class GRPCClient<T extends IGRPCClientMapOfMethods = IGRPCClientMapOfMeth
         (method: string,
         serialize: grpc.serialize<RequestType>,
         deserialize: grpc.deserialize<ResponseType>,
-        argument: RequestType | null,
+        argument: RequestType,
         metadata: grpc.Metadata | null,
         options: grpc.CallOptions | null,
         callback: grpc.requestCallback<ResponseType>) {
-        return this.client.makeUnaryRequest<RequestType, ResponseType>(method, serialize, deserialize, argument, metadata, options, callback);
+        
+        const metadata_ = metadata ?? new grpc.Metadata();
+        const options_ = options?? {};
+
+        return this.client.makeUnaryRequest<RequestType, ResponseType>(method, serialize, deserialize, argument, metadata_, options_, callback);
     }
 
     public makeBidiStreamRequest
@@ -123,7 +127,11 @@ export class GRPCClient<T extends IGRPCClientMapOfMethods = IGRPCClientMapOfMeth
         deserialize: grpc.deserialize<ResponseType>,
         metadata?: grpc.Metadata | null,
         options?: grpc.CallOptions | null) {
-        return this.client.makeBidiStreamRequest<RequestType, ResponseType>(method, serialize, deserialize, metadata, options);
+            
+        const metadata_ = metadata ?? new grpc.Metadata();
+        const options_ = options?? {};
+
+        return this.client.makeBidiStreamRequest<RequestType, ResponseType>(method, serialize, deserialize, metadata_, options_);
     }
 
     public makeClientStreamRequest
@@ -134,7 +142,11 @@ export class GRPCClient<T extends IGRPCClientMapOfMethods = IGRPCClientMapOfMeth
         metadata: grpc.Metadata | null,
         options: grpc.CallOptions | null,
         callback: grpc.requestCallback<ResponseType>) {
-        return this.client.makeClientStreamRequest<RequestType, ResponseType>(method, serialize, deserialize, metadata, options, callback);
+            
+        const metadata_ = metadata ?? new grpc.Metadata();
+        const options_ = options?? {};
+
+        return this.client.makeClientStreamRequest<RequestType, ResponseType>(method, serialize, deserialize, metadata_, options_, callback);
     }
 
     public makeServerStreamRequest
@@ -145,6 +157,10 @@ export class GRPCClient<T extends IGRPCClientMapOfMethods = IGRPCClientMapOfMeth
         argument: RequestType,
         metadata?: grpc.Metadata | null,
         options?: grpc.CallOptions | null) {
-        return this.client.makeServerStreamRequest<RequestType, ResponseType>(method, serialize, deserialize, argument, metadata, options);
+            
+        const metadata_ = metadata ?? new grpc.Metadata();
+        const options_ = options?? {};
+
+        return this.client.makeServerStreamRequest<RequestType, ResponseType>(method, serialize, deserialize, argument, metadata_, options_);
     }
 }
