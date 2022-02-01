@@ -64,7 +64,7 @@ export class GRPCClient<T extends IGRPCClientMapOfMethods = IGRPCClientMapOfMeth
 
     public call<RequestType, ResponseType>(methodName: string, argument: RequestType, options: Partial<IGRPCClientCallOptions> = {}): Promise<ResponseType> {
         // tslint:disable-next-line: no-parameter-reassignment
-        options = { metadata: undefined, ...options! };
+        options = { metadata: new grpc.Metadata(), ...options! };
 
         return new Promise((resolve, reject) => {
             const client = this.client as any;
@@ -83,7 +83,7 @@ export class GRPCClient<T extends IGRPCClientMapOfMethods = IGRPCClientMapOfMeth
                 return;
             }
 
-           client[methodName](argument, options!.metadata, options, cb);
+           client[methodName](argument, options.metadata, options, cb);
 
             // as grpc.Client.prototype.makeUnaryRequest();
         });
